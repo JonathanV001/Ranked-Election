@@ -4,22 +4,32 @@ import { useContext } from 'react';
 import DataContext from './context/DataContext';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { data } from 'autoprefixer';
 
 const Graph = () => {
     const  { candidateVotesTotal, candidates } = useContext(DataContext);
     const  [chartData, setChartData] = useState([])
+    const [chartLabels, setChartLabels] = useState([])
+    const [chartColors, setChartColors] = useState([])
     
     // recalculates votes when another one is cast (candidateVotesTotal)
     useEffect(() => {
       let newChartData = []
+      let newChartLabels = []
+      let newChartColors = []
       for(const candidate in candidateVotesTotal){
-        let voteTotalAsArray = [candidateVotesTotal[candidate]]
-        let chartDataUnit = {data: voteTotalAsArray , label: candidate, color: (candidates.find(c => c.name == candidate)).color}
-        console.log(chartDataUnit)
-        newChartData = [...newChartData, chartDataUnit]
+        let votes = candidateVotesTotal[candidate]
+        let newChartLabel = candidate
+        let newCandidateColor = candidates.find(c => c.name == candidate).color
+        console.log(votes)
+        newChartData = [...newChartData, votes]
+        newChartLabels = [...newChartLabels, newChartLabel]
+        newChartColors = [...newChartColors, newCandidateColor]
         console.log(newChartData)
       }
       setChartData(newChartData)
+      setChartLabels(newChartLabels)
+      setChartColors(newChartColors)
       console.log(chartData)
       
     }, [candidateVotesTotal, setChartData])
@@ -27,9 +37,16 @@ const Graph = () => {
     <>
         <section className='flex flex-col justify-evenly items-center content-center flex-wrap min-h-screen'>
         <BarChart
-            series={chartData}
+            series={[{data: chartData}]}
+            colors={chartColors}
             height={500}
-            xAxis={[{scaleType: 'band', data: chartData.map((c) => c.label)}]}
+            xAxis={[{data: chartLabels, scaleType: 'band', colorMap: {
+              type: 'ordinal',
+              values: chartLabels,
+              colors: chartColors
+                }
+              }
+            ]}
             margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
          />
         </section> 
