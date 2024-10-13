@@ -33,21 +33,21 @@ const Hero = () => {
 
   const createVote = (event) => {
     event.preventDefault();
-    const voteMap = {};
-    let index = 1;
+    const voteArray = [];
     let voteChoices = document.getElementById("voteChoices");
+    let firstCandidate = true
     for (const child of voteChoices.children){
       let candidate = child.options[child.selectedIndex].text
       console.log(candidate)
-      voteMap[index] = candidate;
-      if(index == 1){
+      voteArray.push(candidate);
+      if(firstCandidate){
         console.log(candidateVotesTotal[candidate])
         const newValue = candidateVotesTotal[candidate] >= 1 ? candidateVotesTotal[candidate] += 1 : 1
         setCandidateVotesTotal({...candidateVotesTotal, [candidate]: newValue})
       }
-      index += 1
+      firstCandidate = false;
     }
-    setVotes([...votes, voteMap])
+    setVotes([...votes, voteArray])
   }
 
   

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { data } from 'autoprefixer';
 
 const Graph = () => {
-    const  { candidateVotesTotal, candidates } = useContext(DataContext);
+    const  { candidateVotesTotal, setCandidateVotesTotal ,candidates, votes, setVotes } = useContext(DataContext);
     const  [chartData, setChartData] = useState([])
     const [chartLabels, setChartLabels] = useState([])
     const [chartColors, setChartColors] = useState([])
@@ -32,23 +32,80 @@ const Graph = () => {
       setChartColors(newChartColors)
       console.log(chartData)
       
-    }, [candidateVotesTotal, setChartData])
+    }, [candidateVotesTotal, setChartData, votes])
+
+    const resetBallot = (vote, eliminatedCandidate) => {
+      /*deletes candidate from ballots and adjust ballot rankings*/
+      let foundEliminatedCandidate = false
+      let leftArray = []
+      let rightArray = []
+
+      for(let i = 0; i < vote.length; i++){ 
+        if(vote[i] != eliminatedCandidate && foundEliminatedCandidate == false){
+          leftArray.push(vote[i])
+        }else if (vote[i] != eliminatedCandidate && foundEliminatedCandidate == true){
+          rightArray.push(vote[i])
+        }else if(vote[i] == eliminatedCandidate){
+          foundEliminatedCandidate = true
+        }
+      }
+      
+      console.log(leftArray)
+      console.log(rightArray)
+      const newBallot = leftArray.concat(rightArray);
+
+      return newBallot
+    }
+
+    const eliminateCandidate = (event) => {
+      event.preventDefault();
+
+      /*deletes candidate from candidateVotesTotal list*/
+      let min = Number.MAX_SAFE_INTEGER
+      let minCandidate = ""
+      for (const candidate in candidateVotesTotal){
+        if(candidateVotesTotal[candidate] < min){
+          min = candidateVotesTotal[candidate]
+          minCandidate = candidate
+        }
+      }
+      let newCandidateVotesTotal = candidateVotesTotal
+      delete newCandidateVotesTotal[minCandidate]
+      setCandidateVotesTotal(newCandidateVotesTotal)
+
+      let newVotes = []
+      for(let i = 0; i < votes.length; i++){
+        console.log(minCandidate)
+        console.log(votes[i])
+        let newVote = resetBallot(votes[i], minCandidate)
+        console.log(newVote)
+        newVotes.push(newVote)
+      }
+
+      setVotes(newVotes)
+
+      //update new cnaiddate votes totals, votes are all updated correctly now
+      //look at create vote
+    }
+
+
   return (
     <>
         <section className='flex flex-col justify-evenly items-center content-center flex-wrap min-h-screen'>
-        <BarChart
-            series={[{data: chartData}]}
-            colors={chartColors}
-            height={500}
-            xAxis={[{data: chartLabels, scaleType: 'band', colorMap: {
-              type: 'ordinal',
-              values: chartLabels,
-              colors: chartColors
+          <BarChart
+              series={[{data: chartData}]}
+              colors={chartColors}
+              height={500}
+              xAxis={[{data: chartLabels, scaleType: 'band', colorMap: {
+                type: 'ordinal',
+                values: chartLabels,
+                colors: chartColors
+                  }
                 }
-              }
-            ]}
-            margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-         />
+              ]}
+              margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+          />
+          <button className='h-24 w-52 mb-4 bg-blue-600 hover:bg-blue-400 border-2 border-solid border-black font-democracy text-1.5xl' onClick={eliminateCandidate}>Next Round</button>
         </section> 
     </>
   );
