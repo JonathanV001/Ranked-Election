@@ -35,20 +35,20 @@ const Hero = () => {
     event.preventDefault();
     const voteArray = [];
     let voteChoices = document.getElementById("voteChoices");
-    let firstCandidate = true
     for (const child of voteChoices.children){
       let candidate = child.options[child.selectedIndex].text
       console.log(candidate)
       voteArray.push(candidate);
-      if(firstCandidate){
-        console.log(candidateVotesTotal[candidate])
-        const newValue = candidateVotesTotal[candidate] >= 1 ? candidateVotesTotal[candidate] += 1 : 1
-        //maybe bad to direct mutate but its working
-        setCandidateVotesTotal({...candidateVotesTotal, [candidate]: newValue})
-      }
-      firstCandidate = false;
+      // if(firstCandidate){
+      //   console.log(candidateVotesTotal[candidate])
+      //   const newValue = candidateVotesTotal[candidate] >= 1 ? candidateVotesTotal[candidate] += 1 : 1
+      //   //maybe bad to direct mutate but its working
+      //   setCandidateVotesTotal({...candidateVotesTotal, [candidate]: newValue})
+      // }
+      // firstCandidate = false;
     }
-    setVotes([...votes, voteArray])
+    const newVotes = [...votes, voteArray]
+    setVotes(newVotes)
   }
 
   

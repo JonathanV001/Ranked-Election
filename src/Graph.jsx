@@ -27,7 +27,13 @@ const Graph = () => {
           console.log("reading this vote: " + votes[i] + " from votes: " + votes)
           let firstPlaceCandidate = votes[i][0]
           console.log("counting votes again for: " + firstPlaceCandidate)
-          updatedCandidateVotesTotal[firstPlaceCandidate] += 1
+          console.log("current amount of votes: " + updatedCandidateVotesTotal[firstPlaceCandidate])
+          if(updatedCandidateVotesTotal.hasOwnProperty(firstPlaceCandidate)){
+              updatedCandidateVotesTotal[firstPlaceCandidate] += 1
+          }else{
+            updatedCandidateVotesTotal[firstPlaceCandidate] = 1
+          }
+          console.log("amount of votes after adding: " + updatedCandidateVotesTotal[firstPlaceCandidate])
       }
       setCandidateVotesTotal(updatedCandidateVotesTotal)
     }, [votes])
