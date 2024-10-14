@@ -43,6 +43,7 @@ const Hero = () => {
       if(firstCandidate){
         console.log(candidateVotesTotal[candidate])
         const newValue = candidateVotesTotal[candidate] >= 1 ? candidateVotesTotal[candidate] += 1 : 1
+        //maybe bad to direct mutate but its working
         setCandidateVotesTotal({...candidateVotesTotal, [candidate]: newValue})
       }
       firstCandidate = false;

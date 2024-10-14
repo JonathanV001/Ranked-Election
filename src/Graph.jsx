@@ -11,6 +11,26 @@ const Graph = () => {
     const  [chartData, setChartData] = useState([])
     const [chartLabels, setChartLabels] = useState([])
     const [chartColors, setChartColors] = useState([])
+
+    //when votes change retally and set new vote totals
+    useEffect(() => {
+        //first set all candidate votes to 0
+      const newCandidateVotesTotal = {}
+      for(const key in candidateVotesTotal){
+        console.log(key)
+        newCandidateVotesTotal[key] = 0
+      }
+      //then count again
+
+      const updatedCandidateVotesTotal = newCandidateVotesTotal
+      for(let i = 0; i < votes.length; i++){
+          console.log("reading this vote: " + votes[i] + " from votes: " + votes)
+          let firstPlaceCandidate = votes[i][0]
+          console.log("counting votes again for: " + firstPlaceCandidate)
+          updatedCandidateVotesTotal[firstPlaceCandidate] += 1
+      }
+      setCandidateVotesTotal(updatedCandidateVotesTotal)
+    }, [votes])
     
     // recalculates votes when another one is cast (candidateVotesTotal)
     useEffect(() => {
@@ -18,8 +38,10 @@ const Graph = () => {
       let newChartLabels = []
       let newChartColors = []
       for(const candidate in candidateVotesTotal){
+        console.log("current candidates: " + candidateVotesTotal)
         let votes = candidateVotesTotal[candidate]
         let newChartLabel = candidate
+        console.log("setting candidate: " + candidate)
         let newCandidateColor = candidates.find(c => c.name == candidate).color
         console.log(votes)
         newChartData = [...newChartData, votes]
@@ -84,8 +106,7 @@ const Graph = () => {
 
       setVotes(newVotes)
 
-      //update new cnaiddate votes totals, votes are all updated correctly now
-      //look at create vote
+
     }
 
 
