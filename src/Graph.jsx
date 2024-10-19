@@ -5,12 +5,15 @@ import DataContext from './context/DataContext';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { data } from 'autoprefixer';
+import Refresh from './Refresh';
 
 const Graph = () => {
     const  { candidateVotesTotal, setCandidateVotesTotal ,candidates, votes, setVotes } = useContext(DataContext);
     const  [chartData, setChartData] = useState([])
     const [chartLabels, setChartLabels] = useState([])
     const [chartColors, setChartColors] = useState([])
+
+    const [ nextRoundButtonLocked, setNextRoundButtonLocked] = useState(true)
 
     //when votes change retally and set new vote totals
     useEffect(() => {
@@ -58,6 +61,11 @@ const Graph = () => {
       setChartData(newChartData)
       setChartLabels(newChartLabels)
       setChartColors(newChartColors)
+      if(Object.keys(candidateVotesTotal).length > 1){
+        setNextRoundButtonLocked(false)
+      }else{
+        setNextRoundButtonLocked(true)
+      }
       console.log(chartData)
       
     }, [candidateVotesTotal, setChartData, votes])
@@ -132,7 +140,10 @@ const Graph = () => {
               ]}
               margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
           />
-          <button className='h-24 w-52 mb-4 bg-blue-600 hover:bg-blue-400 border-2 border-solid border-black font-democracy text-1.5xl' onClick={eliminateCandidate}>Next Round</button>
+          <div className='flex justify-center content-center items-center'>
+            <button className='h-24 w-52 mb-4 bg-blue-600 hover:bg-blue-400 border-2 border-solid border-black font-democracy text-1.5xl disabled:bg-blue-300 disabled:cursor-not-allowed' onClick={eliminateCandidate} disabled={nextRoundButtonLocked}>Next Round</button>
+            <Refresh />
+          </div>
         </section> 
     </>
   );
