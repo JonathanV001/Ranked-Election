@@ -74,7 +74,7 @@ const Hero = () => {
   return (
     <section className='flex flex-col justify-evenly items-center content-center flex-wrap min-h-screen'>
         <title className='flex content-center justify-center'>
-            <h1 className=' text-3xl sm:text-5xl font font-democracy text-center'>True Election</h1>
+            <h1 className=' text-3xl sm:text-5xl font font-democracy text-center'>Ranked Election</h1>
         </title>
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-12 mt-10 max-w-8/12" id="candidateDisplay">
             {candidates.map((c) => (
